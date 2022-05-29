@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using PracticeNetCore.Interfaces;
+using PracticeNetCore.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,6 +20,9 @@ namespace PracticeNetCore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IKategoryRepository, KategoriRepository>();
+            services.AddScoped<IUrunRepository, UrunRepository>();
+            services.AddScoped<IUrunKategoriRepository, UrunKategoriRepository>();
             services.AddControllersWithViews();
         }
 

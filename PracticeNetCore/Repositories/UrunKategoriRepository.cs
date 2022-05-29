@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace PracticeNetCore.Repositories
 {
-    public class UrunRepository : GenericRepository<Urun>,IUrunRepository
+    public class UrunKategoriRepository : GenericRepository<UrunKategori>,IUrunKategoriRepository
     {
      
     }
