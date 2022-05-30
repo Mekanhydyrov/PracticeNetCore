@@ -14,5 +14,9 @@ namespace PracticeNetCore.Controllers
         {
             return View(_urunRepository.GetirHepsi());
         }
+        public IActionResult UrunDetay(int id)
+        {
+            return View(_urunRepository.GetirIdile(id));
+        }
     }
 }

@@ -1,12 +1,3 @@
-﻿@model List<PracticeNetCore.Entities.Urun>
+﻿
 
-<table class="table small border">
-    @foreach (var x in Model)
-    {
-<tr>
-    <td>@x.Id</td>
-    <td>@x.Ad</td>
-    <td>@x.Fiyat</td>
-</tr>
-    }
-</table>
+ @await Component.InvokeAsync("UrunList")

@@ -49,7 +49,7 @@ namespace PracticeNetCore
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(name:"default",pattern:
-                    "{Controller=Home}/{Action=Index}");
+                    "{Controller=Home}/{Action=Index}/{id?}");
             });
         }
     }
