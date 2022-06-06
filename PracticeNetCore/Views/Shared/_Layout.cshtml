@@ -28,13 +28,10 @@
             </div>
     </nav>
     @*navbar End*@
-    <div class="row mt-2">
-        <div class="col-md-3">
-           @await Component.InvokeAsync("KategoriList")
-        </div>
-        <div class="col-md-9">
+    <div class="mt-2">
+       <div class="container-fluid">
             @RenderBody()
-        </div>
+       </div>     
     </div>
 </body>
 </html>
