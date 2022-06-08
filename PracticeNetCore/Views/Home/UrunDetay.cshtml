@@ -6,11 +6,15 @@
             <img src="" class="w-100 img-thumbnail img-fluid" alt="@Model.Ad" />
         </div>
         <div class="col-md-9">
-            <div class="card">
+            @ViewBag.Session
+            <div class="card"> 
                 <div class="card-header">@Model.Ad</div>
                 <div class="card-body">
                     <h5 class="card-title">@Model.Ad</h5>
-                    <p class="card-text">@Model.Fiyat</p>
+                    <p class="card-text">
+                        <strong>Kategoriler:</strong> <getirKategoriAd urun-id="@Model.Id"></getirKategoriAd>
+                        <br />
+                        @Model.Fiyat</p>
                     <a class="btn btn-danger float-right" asp-controller="Home" asp-action="Index">Geri Dön</a>
                     <a href="#" class="btn btn-primary float-right">Sepete Ekle</a>
                 </div>

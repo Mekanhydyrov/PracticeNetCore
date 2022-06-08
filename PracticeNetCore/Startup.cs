@@ -24,6 +24,7 @@ namespace PracticeNetCore
             services.AddScoped<IUrunRepository, UrunRepository>();
             services.AddScoped<IUrunKategoriRepository, UrunKategoriRepository>();
             services.AddControllersWithViews();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +45,8 @@ namespace PracticeNetCore
             //});
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             //Webigem.com/Home/Index
             app.UseEndpoints(endpoints =>
