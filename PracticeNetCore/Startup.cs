@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using PracticeNetCore.Contexts;
+using PracticeNetCore.Entities;
 using PracticeNetCore.Interfaces;
 using PracticeNetCore.Repositories;
 using System;
@@ -20,6 +23,15 @@ namespace PracticeNetCore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<Context>();
+            services.AddIdentity<AppUser, IdentityRole>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequiredLength = 1;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<Context>();
             services.AddScoped<IKategoryRepository, KategoriRepository>();
             services.AddScoped<IUrunRepository, UrunRepository>();
             services.AddScoped<IUrunKategoriRepository, UrunKategoriRepository>();
@@ -28,13 +40,13 @@ namespace PracticeNetCore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<AppUser> userManager, RoleManager<IdentityRole>roleManager)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            IdentityInitializer.OlusturAdmin(userManager, roleManager);
             app.UseRouting();
             //Node Modules disari acma
             //app.UseStaticFiles(new StaticFileOptions
@@ -53,6 +65,8 @@ namespace PracticeNetCore
             {
                 endpoints.MapControllerRoute(name:"default",pattern:
                     "{Controller=Home}/{Action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(name: "areas", pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PracticeNetCore.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PracticeNetCore.Contexts
 {
-    public class Context : DbContext
+    public class Context : IdentityDbContext<AppUser>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("server=DESKTOP-CTHI0CB; database=PracticNetCoreDB; integrated security=true");
+            base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,6 +22,7 @@ namespace PracticeNetCore.Contexts
                 I.KategoriId,
                 I.UrunId
             }).IsUnique();
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<UrunKategori> UrunKategoris { get; set; }

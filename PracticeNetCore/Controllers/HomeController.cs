@@ -6,7 +6,7 @@ namespace PracticeNetCore.Controllers
 {
     public class HomeController : Controller
     {
-        IUrunRepository _urunRepository;
+        private readonly IUrunRepository _urunRepository;
         public HomeController(IUrunRepository urunRepository)
         {
             _urunRepository = urunRepository;
@@ -14,13 +14,13 @@ namespace PracticeNetCore.Controllers
         public IActionResult Index()
         {
             //SetCookie("kisi", "Mekan Hydyrov");
-            SetSession("kisi", "Mekan Hydyrov");
+            //SetSession("kisi", "Mekan Hydyrov");
             return View(_urunRepository.GetirHepsi());
         }
         public IActionResult UrunDetay(int id)
         {
             //ViewBag.Cookie = GetCookie("kisi");
-            ViewBag.Session = GetSession("kisi");
+            //ViewBag.Session = GetSession("kisi");
             return View(_urunRepository.GetirIdile(id));
         }
         //cookie
@@ -35,13 +35,13 @@ namespace PracticeNetCore.Controllers
         //}
 
         //Session
-        public void SetSession(string key, string value)
-        {
-            HttpContext.Session.SetString(key, value);
-        }
-        public string GetSession(string key)
-        {
-            return HttpContext.Session.GetString(key);
-        }
+        //public void SetSession(string key, string value)
+        //{
+        //    HttpContext.Session.SetString(key, value);
+        //}
+        //public string GetSession(string key)
+        //{
+        //    return HttpContext.Session.GetString(key);
+        //}
     }
 }
