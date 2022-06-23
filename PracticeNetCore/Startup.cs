@@ -24,6 +24,7 @@ namespace PracticeNetCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<Context>();
+            services.AddAuthentication();
             services.AddIdentity<AppUser, IdentityRole>(opt =>
             {
                 opt.Password.RequireDigit = false;
@@ -32,6 +33,16 @@ namespace PracticeNetCore
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<Context>();
+
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.LoginPath = new PathString("/Home/GirisYap");
+                opt.Cookie.Name = "AspNetCorePractic";
+                opt.Cookie.HttpOnly = true;
+                opt.Cookie.SameSite = SameSiteMode.Strict;
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            });
+
             services.AddScoped<IKategoryRepository, KategoriRepository>();
             services.AddScoped<IUrunRepository, UrunRepository>();
             services.AddScoped<IUrunKategoriRepository, UrunKategoriRepository>();
@@ -60,6 +71,9 @@ namespace PracticeNetCore
 
             app.UseSession();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+            
             //Webigem.com/Home/Index
             app.UseEndpoints(endpoints =>
             {

@@ -1,14 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PracticeNetCore.Entities;
 using PracticeNetCore.Interfaces;
+using PracticeNetCore.Models;
 
 namespace PracticeNetCore.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly IUrunRepository _urunRepository;
-        public HomeController(IUrunRepository urunRepository)
+        public HomeController(IUrunRepository urunRepository, SignInManager<AppUser> signInManager)
         {
+            _signInManager = signInManager;
             _urunRepository = urunRepository;
         }
         public IActionResult Index()
@@ -43,5 +48,24 @@ namespace PracticeNetCore.Controllers
         //{
         //    return HttpContext.Session.GetString(key);
         //}
+        public IActionResult GirisYap()
+        {
+            return View(new KullaniciGirisModel());
+        }
+        [HttpPost]
+        public IActionResult GirisYap(KullaniciGirisModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var signInResult = _signInManager.PasswordSignInAsync(model.KullaniciAd, model.Sifre, model.BeniHatirla, false).Result;
+
+                if (signInResult.Succeeded)
+                {
+                    return RedirectToAction("Index","Home", new {Area="Admin"});
+                }
+                ModelState.AddModelError("", "Kullanıcı Adı veya Şifre Hatalı");
+            }
+            return View(model);
+        }
     }
 }
