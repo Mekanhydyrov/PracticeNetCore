@@ -77,10 +77,11 @@ namespace PracticeNetCore
             //Webigem.com/Home/Index
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(name: "areas", pattern: "{area}/{Controller=Home}/{Action=Index}/{id?}");
+
                 endpoints.MapControllerRoute(name:"default",pattern:
                     "{Controller=Home}/{Action=Index}/{id?}");
 
-                endpoints.MapControllerRoute(name: "areas", pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

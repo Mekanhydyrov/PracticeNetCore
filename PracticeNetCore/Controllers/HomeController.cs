@@ -61,7 +61,7 @@ namespace PracticeNetCore.Controllers
 
                 if (signInResult.Succeeded)
                 {
-                    return RedirectToAction("Index","Home", new {Area="Admin"});
+                    return RedirectToAction("Index","Home", new {area="Admin"});
                 }
                 ModelState.AddModelError("", "Kullanıcı Adı veya Şifre Hatalı");
             }

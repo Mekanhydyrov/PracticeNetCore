@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PracticeNetCore.Entities;
 using PracticeNetCore.Interfaces;
+using PracticeNetCore.Models;
+using System;
+using System.IO;
 
 namespace PracticeNetCore.Areas.Admin.Controllers
 {
@@ -16,6 +20,68 @@ namespace PracticeNetCore.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View(_urunRepository.GetirHepsi());
+        }
+        public IActionResult Ekle()
+        {
+            return View(new UrunEkleModel());
+        }
+        [HttpPost]
+        public IActionResult Ekle(UrunEkleModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Urun urun = new Urun();
+                if(model.Resim != null)
+                {
+                    var uzanti = Path.GetExtension(model.Resim.FileName);
+                    var yeniResimAd = Guid.NewGuid() + uzanti;
+                    var yuklenecekYer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/" + yeniResimAd);
+                    var stream = new FileStream(yuklenecekYer, FileMode.Create);
+                    model.Resim.CopyTo(stream);
+
+                    urun.Resim = yeniResimAd;
+                }
+                urun.Ad = model.Ad;
+                urun.Fiyat = model.Fiyat;
+
+                _urunRepository.Ekle(urun);
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
+            }
+            return View(model);
+        }
+        public IActionResult Guncelle(int id)
+        {
+            var gelenUrun = _urunRepository.GetirIdile(id);
+            UrunGuncelleModel model = new UrunGuncelleModel
+            {
+                Ad = gelenUrun.Ad,
+                Fiyat = gelenUrun.Fiyat,
+                Id = gelenUrun.Id
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Guncelle(UrunGuncelleModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var guncellenecekUrun = _urunRepository.GetirIdile(model.Id);
+                if (model.Resim != null)
+                {
+                    var uzanti = Path.GetExtension(model.Resim.FileName);
+                    var yeniResimAd = Guid.NewGuid() + uzanti;
+                    var yuklenecekYer = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/" + yeniResimAd);
+                    var stream = new FileStream(yuklenecekYer, FileMode.Create);
+                    model.Resim.CopyTo(stream);
+
+                    guncellenecekUrun.Resim = yeniResimAd;
+                }
+                guncellenecekUrun.Ad = model.Ad;
+                guncellenecekUrun.Fiyat = model.Fiyat;
+                _urunRepository.Guncelle(guncellenecekUrun);
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
+            }
+            return View(model);
         }
     }
 }
