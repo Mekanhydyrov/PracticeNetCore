@@ -36,5 +36,34 @@ namespace PracticeNetCore.Areas.Admin.Controllers
             }
             return View(model);
         }
+        //Güncelleme işlemi
+        public IActionResult Guncelle(int id)
+        {
+            var guncellenecekKategori = _kategoriRepository.GetirIdile(id);
+
+            KategoriGuncelleModel model = new KategoriGuncelleModel
+            {
+                Id = guncellenecekKategori.Id,
+                Ad = guncellenecekKategori.Ad
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Guncelle(KategoriGuncelleModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var guncellenecekKategori = _kategoriRepository.GetirIdile(model.Id);
+                guncellenecekKategori.Ad = model.Ad;
+                _kategoriRepository.Guncelle(guncellenecekKategori);
+                return RedirectToAction("Index");
+            }
+            return View(model);
+        }
+        public IActionResult Sil(int id)
+        {
+            _kategoriRepository.Sil(new Kategori { Id = id });
+            return RedirectToAction("Index");
+        }
     }
 }

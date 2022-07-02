@@ -4,7 +4,9 @@ using PracticeNetCore.Entities;
 using PracticeNetCore.Interfaces;
 using PracticeNetCore.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace PracticeNetCore.Areas.Admin.Controllers
 {
@@ -13,8 +15,10 @@ namespace PracticeNetCore.Areas.Admin.Controllers
     public class HomeController : Controller
     {
         private readonly IUrunRepository _urunRepository;
-        public HomeController(IUrunRepository urunRepository)
+        private readonly IKategoryRepository _kategoryRepository;
+        public HomeController(IUrunRepository urunRepository, IKategoryRepository kategoryRepository)
         {
+            _kategoryRepository = kategoryRepository;
             _urunRepository = urunRepository;
         }
         public IActionResult Index()
@@ -86,6 +90,52 @@ namespace PracticeNetCore.Areas.Admin.Controllers
         public IActionResult Sil(int id)
         {
             _urunRepository.Sil(new Urun { Id = id });
+            return RedirectToAction("Index");
+        }
+        //Ürüne Kategori Atama
+        public IActionResult AtaKategori(int id)
+        {
+            var urunAitKategoriler = _urunRepository.GetirKategoriler(id).Select(I => I.Ad);
+            var kategoriler = _kategoryRepository.GetirHepsi();
+
+            TempData["UrunId"] = id;
+
+            List<KategoriAtaModel> list = new List<KategoriAtaModel>();
+           
+            foreach(var item in kategoriler)
+            {
+                KategoriAtaModel model = new KategoriAtaModel();
+                model.KategoriId = item.Id;
+                model.KategoriAd = item.Ad;
+                model.Varmi = urunAitKategoriler.Contains(item.Ad);
+
+                list.Add(model);
+            }
+            return View(list);
+        }
+        [HttpPost]
+        public IActionResult AtaKategori(List<KategoriAtaModel> list)
+        {
+            int urunId = (int)TempData["UrunId"];
+            foreach(var item in list)
+            {
+                if (item.Varmi)
+                {
+                    _urunRepository.EkleKategori(new UrunKategori
+                    {
+                        KategoriId = item.KategoriId,
+                        UrunId = urunId
+                    });
+                }
+                else
+                {
+                    _urunRepository.SilKategori(new UrunKategori
+                    {
+                        KategoriId = item.KategoriId,
+                        UrunId = urunId
+                    });
+                }
+            }
             return RedirectToAction("Index");
         }
     }

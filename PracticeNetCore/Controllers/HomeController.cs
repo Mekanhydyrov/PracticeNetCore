@@ -16,11 +16,12 @@ namespace PracticeNetCore.Controllers
             _signInManager = signInManager;
             _urunRepository = urunRepository;
         }
-        public IActionResult Index()
+        public IActionResult Index(int? kateogiriId)
         {
+            ViewBag.KategoriId = kateogiriId;
             //SetCookie("kisi", "Mekan Hydyrov");
             //SetSession("kisi", "Mekan Hydyrov");
-            return View(_urunRepository.GetirHepsi());
+            return View();
         }
         public IActionResult UrunDetay(int id)
         {
