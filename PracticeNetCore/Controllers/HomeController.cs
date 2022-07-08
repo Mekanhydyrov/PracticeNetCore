@@ -16,9 +16,9 @@ namespace PracticeNetCore.Controllers
             _signInManager = signInManager;
             _urunRepository = urunRepository;
         }
-        public IActionResult Index(int? kateogiriId)
+        public IActionResult Index(int? kategoriId)
         {
-            ViewBag.KategoriId = kateogiriId;
+            ViewBag.KategoriId = kategoriId;
             //SetCookie("kisi", "Mekan Hydyrov");
             //SetSession("kisi", "Mekan Hydyrov");
             return View();
