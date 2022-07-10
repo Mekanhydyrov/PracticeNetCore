@@ -1,4 +1,12 @@
 ﻿
+@if (TempData["bildirim"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Başarlı!</strong> @TempData["bildirim"].ToString()
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 
 <div class="row">
     <div class="col-md-3">
@@ -11,4 +19,4 @@
 
 
 
- 
+
